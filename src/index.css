@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 96%;
+    --foreground: 220 20% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 15%;
+
+    --primary: 145 63% 42%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 20% 96%;
+    --secondary-foreground: 220 20% 15%;
+
+    --muted: 210 15% 94%;
+    --muted-foreground: 215 14% 50%;
+
+    --accent: 145 50% 94%;
+    --accent-foreground: 145 63% 32%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 20% 90%;
+    --input: 214 20% 90%;
+    --ring: 145 63% 42%;
+
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --topbar: 145 63% 42%;
+    --topbar-foreground: 0 0% 100%;
+    --sidebar-bg: 0 0% 100%;
+    --sidebar-fg: 220 15% 30%;
+    --sidebar-active-bg: 145 50% 94%;
+    --sidebar-active-fg: 145 63% 35%;
+    --sidebar-hover: 145 30% 96%;
+
+    /* Stat card colors */
+    --stat-pink: 340 82% 65%;
+    --stat-pink-bg: 340 82% 95%;
+    --stat-blue: 195 85% 55%;
+    --stat-blue-bg: 195 85% 93%;
+    --stat-green: 145 63% 50%;
+    --stat-green-bg: 145 63% 93%;
+    --stat-orange: 30 90% 60%;
+    --stat-orange-bg: 30 90% 93%;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 15% 30%;
+    --sidebar-primary: 145 63% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 145 50% 94%;
+    --sidebar-accent-foreground: 145 63% 35%;
+    --sidebar-border: 214 20% 92%;
+    --sidebar-ring: 145 63% 42%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+}
