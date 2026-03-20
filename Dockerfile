@@ -2,7 +2,7 @@
 FROM node:20-alpine as build 
 WORKDIR /app 
 COPY package*.json ./ 
-RUN npm install 
+RUN npm install --include=dev 
 # Baris ini akan meng-copy semua file, TERMASUK file .env yang digenerate oleh Papuyu
 COPY . . 
 # Vite akan otomatis membaca file .env tersebut
