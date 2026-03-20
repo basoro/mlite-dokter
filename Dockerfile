@@ -2,9 +2,13 @@
 FROM node:20-alpine as build 
 WORKDIR /app 
 COPY package*.json ./ 
-RUN npm install --include=dev 
+# Force development mode for npm install so devDependencies (like Vite) are installed
+ENV NODE_ENV=development
+RUN npm install 
 # Baris ini akan meng-copy semua file, TERMASUK file .env yang digenerate oleh Papuyu
 COPY . . 
+# Reset to production for the actual build
+ENV NODE_ENV=production
 # Vite akan otomatis membaca file .env tersebut
 RUN npm run build 
 
