@@ -12,83 +12,71 @@ class WhatsappOtpService {
    * @param {string} username - User's username
    * @returns {Promise<Object>} - Response with OTP details
    */
-  static async sendOTP(phoneNumber: string, username: string) {
-    try {
-      if (!phoneNumber) {
-        throw new Error('Phone number is required');
-      }
+  static async sendOTP(phoneNumber: string, username: string) { 
+    try { 
+      if (!phoneNumber) { 
+        throw new Error('Phone number is required'); 
+      } 
 
-      // Generate 6-digit OTP
-      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      // Generate 6-digit OTP 
+      const otp = Math.floor(100000 + Math.random() * 900000).toString(); 
       
-      // Clean phone number (remove leading 0 and add 62)
-      let cleanNumber = phoneNumber.replace(/^0/, '62');
-      if (!cleanNumber.startsWith('62')) {
-        cleanNumber = '62' + cleanNumber;
-      }
+      // Clean phone number (remove leading 0 and add 62) 
+      let cleanNumber = phoneNumber.replace(/^0/, '62'); 
+      if (!cleanNumber.startsWith('62')) { 
+        cleanNumber = '62' + cleanNumber; 
+      } 
 
-      // Prepare WhatsApp message
-      const appTitle = import.meta.env.VITE_APP_TITLE || 'mLITE Indonesia';
-      const message = `Kode OTP untuk login ${appTitle}: ${otp}\n\nKode ini berlaku selama 5 menit.\nJangan berikan kode ini kepada siapa pun.`;
+      // Prepare WhatsApp message 
+      const appTitle = import.meta.env.VITE_APP_TITLE || 'mLITE Indonesia'; 
+      const message = `Kode OTP untuk login ${appTitle}: ${otp}\n\nKode ini berlaku selama 5 menit.\nJangan berikan kode ini kepada siapa pun.`; 
 
-      // Send WhatsApp message using WA Gateway
-      const waGatewayUrl = import.meta.env.VITE_WA_GATEWAY_URL || 'https://mlite.id/wagateway/kirimpesan';
-      const apiKey = import.meta.env.VITE_WA_GATEWAY_API_KEY || 'YOUR_WA_GATEWAY_API_KEY_HERE';
-      const senderNumber = import.meta.env.VITE_WA_SENDER_NUMBER || '62812345678'; // Default sender number
+      const waGatewayUrl = import.meta.env.VITE_WA_GATEWAY_URL || 'https://mlite-whatsapp.mlite.id/send'; 
 
-      const formData = new URLSearchParams();
-      formData.append('api_key', apiKey);
-      formData.append('sender', senderNumber);
-      formData.append('number', cleanNumber);
-      formData.append('message', message);
-      formData.append('type', 'text');
+      console.log('Sending WhatsApp OTP to:', cleanNumber); 
 
-      console.log('Sending WhatsApp OTP to:', cleanNumber);
+      // MENGIRIM REQUEST KE MLITE-WHATSAPP MENGGUNAKAN JSON
+      const waResponse = await axios.post(waGatewayUrl, {
+        to: cleanNumber,
+        message: message
+      }, { 
+        headers: { 
+          'Content-Type': 'application/json', 
+        }, 
+      }); 
 
-      // Note: Direct axios call to external URL might fail due to CORS if not proxied.
-      // But we'll follow the script provided.
-      const waResponse = await axios.post(waGatewayUrl, formData.toString(), {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
+      // Cek response berdasarkan format balasan JSON dari mlite-whatsapp
+      if (!waResponse.data?.ok) { 
+         console.warn('WhatsApp Gateway Warning:', waResponse.data); 
+      } 
 
-      // Check response structure based on web search result {"status":"false","msg":"Token api expired atau tidak valid."}
-      // or success case
-      if (waResponse.data?.status === 'false') {
-         console.warn('WhatsApp Gateway Warning:', waResponse.data);
-         // For development/demo purposes, we might want to proceed even if WA fails, 
-         // OR throw error. Let's log it but proceed with OTP generation so we can test verification 
-         // (User can see OTP in console)
-      }
-
-      // Store OTP with expiration (5 minutes)
-      const expiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString();
-      const otpData = {
-        otp,
-        phoneNumber: cleanNumber,
-        username,
+      // Store OTP with expiration (5 minutes) 
+      const expiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString(); 
+      const otpData = { 
+        otp, 
+        phoneNumber: cleanNumber, 
+        username, 
         expiresAt, 
-      };
+      }; 
 
-      // Use phone number as key
-      (window as any).otpStore.set(cleanNumber, otpData);
+      // Use phone number as key 
+      (window as any).otpStore.set(cleanNumber, otpData); 
       
-      console.log('OTP generated:', { username, phoneNumber: cleanNumber, expiresAt: otpData.expiresAt, otp });
+      console.log('OTP generated:', { username, phoneNumber: cleanNumber, expiresAt: otpData.expiresAt, otp }); 
 
-      return {
-        success: true,
-        message: 'OTP sent successfully',
-        otp, // Return OTP to caller so they can save it to DB
-        cleanNumber,
-        expiresAt
-      };
+      return { 
+        success: true, 
+        message: 'OTP sent successfully', 
+        otp, // Return OTP to caller so they can save it to DB 
+        cleanNumber, 
+        expiresAt 
+      }; 
 
-    } catch (error) {
-      console.error('Error sending WhatsApp OTP:', error);
-      throw error;
-    }
-  }
+    } catch (error) { 
+      console.error('Error sending WhatsApp OTP:', error); 
+      throw error; 
+    } 
+  } 
 
   /**
    * Verify OTP received via WhatsApp
