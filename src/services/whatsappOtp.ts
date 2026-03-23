@@ -28,12 +28,13 @@ class WhatsappOtpService {
       }
 
       // Prepare WhatsApp message
-      const message = `Kode OTP untuk login RSUD H. DAMANHURI: ${otp}\n\nKode ini berlaku selama 5 menit.\nJangan berikan kode ini kepada siapa pun.`;
+      const appTitle = import.meta.env.VITE_APP_TITLE || 'mLITE Indonesia';
+      const message = `Kode OTP untuk login ${appTitle}: ${otp}\n\nKode ini berlaku selama 5 menit.\nJangan berikan kode ini kepada siapa pun.`;
 
       // Send WhatsApp message using WA Gateway
       const waGatewayUrl = import.meta.env.VITE_WA_GATEWAY_URL || 'https://mlite.id/wagateway/kirimpesan';
-      const apiKey = import.meta.env.VITE_WA_GATEWAY_API_KEY || 'ffc1b55b46f3a7346c8ba28c221c28a0';
-      const senderNumber = import.meta.env.VITE_WA_SENDER_NUMBER || '6281250067788'; // Default sender number
+      const apiKey = import.meta.env.VITE_WA_GATEWAY_API_KEY || 'YOUR_WA_GATEWAY_API_KEY_HERE';
+      const senderNumber = import.meta.env.VITE_WA_SENDER_NUMBER || '62812345678'; // Default sender number
 
       const formData = new URLSearchParams();
       formData.append('api_key', apiKey);

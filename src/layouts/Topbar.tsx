@@ -32,8 +32,8 @@ export const Topbar = ({ onMenuClick }: TopbarProps) => {
       </button>
 
       <div className="flex items-center gap-2 text-primary-foreground font-bold text-lg">
-        <img src="/logo.png" alt="Logo" className="h-8 w-8 object-contain" />
-        <span>RSUD H. DAMANHURI</span>
+        <img src={import.meta.env.VITE_APP_LOGO || "/logo.png"} alt="Logo" className="h-8 w-8 object-contain" />
+        <span>{import.meta.env.VITE_APP_TITLE || "mLITE Indonesia"}</span>
       </div>
 
       <div className="flex-1" />

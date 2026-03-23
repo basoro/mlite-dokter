@@ -166,9 +166,9 @@ const Login = () => {
           {!otpStep && (
             <div className="bg-primary p-8 text-center text-primary-foreground">
                 <div className="mx-auto w-24 h-24 rounded-2xl flex items-center justify-center mb-4 backdrop-blur-sm">
-                  <img src="/logo.png" alt="Logo RSUD H. Damanhuri" className="h-22 w-22 object-contain" />
+                  <img src={import.meta.env.VITE_APP_LOGO || "/logo.png"} alt={`Logo ${import.meta.env.VITE_APP_TITLE || "mLITE Indonesia"}`} className="h-22 w-22 object-contain" />
                 </div>
-                <h1 className="text-2xl font-bold">RSUD H. DAMANHURI</h1>
+                <h1 className="text-2xl font-bold">{import.meta.env.VITE_APP_TITLE || "mLITE Indonesia"}</h1>
               <p className="text-primary-foreground/80 text-sm mt-1">Silahkan Login Terlebih Dahulu</p>
             </div>
           )}
@@ -176,13 +176,13 @@ const Login = () => {
           {otpStep && (
             <div className="bg-[#4CAF50] p-8 text-center text-white">
               <div className="mx-auto bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mb-4 backdrop-blur-sm">
-                <img src="/logo-barabai.png" alt="Logo" className="h-10 w-10 object-contain" onError={(e) => {
+                <img src={import.meta.env.VITE_APP_LOGO || "/logo-barabai.png"} alt="Logo" className="h-10 w-10 object-contain" onError={(e) => {
                     // Fallback if image not found
                     e.currentTarget.style.display = 'none';
                     e.currentTarget.parentElement!.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>';
                 }} />
               </div>
-              <h1 className="text-2xl font-bold">RSUD H. DAMANHURI</h1>
+              <h1 className="text-2xl font-bold">{import.meta.env.VITE_APP_TITLE || "mLITE Indonesia"}</h1>
               <p className="text-white/90 text-sm mt-1">Verifikasi OTP WhatsApp</p>
             </div>
           )}
@@ -290,7 +290,7 @@ const Login = () => {
           {/* Footer */}
           <div className="bg-muted/30 p-4 text-center border-t">
             <p className="text-xs text-muted-foreground">
-              &copy; {new Date().getFullYear()} RSUD H. DAMANHURI. All rights reserved.
+              &copy; {new Date().getFullYear()} {import.meta.env.VITE_APP_TITLE || "mLITE Indonesia"}. All rights reserved.
             </p>
           </div>
         </div>
