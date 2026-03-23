@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchDashboardStats, fetchPasienAktif, fetchAntrianTerakhir, fetchPoliklinikHariIni } from '@/api/dashboard';
+import { fetchDashboardStats } from '@/api/dashboard';
 import { DataTable, Column } from '@/components/DataTable';
 import { CardSkeleton } from '@/components/LoadingSkeleton';
 import { EmptyState } from '@/components/EmptyState';
@@ -38,42 +38,34 @@ const Dashboard = () => {
     queryFn: fetchDashboardStats,
   });
 
-  const { data: poliklinik } = useQuery({
-    queryKey: ['poliklinik-hari-ini'],
-    queryFn: fetchPoliklinikHariIni,
-  });
-
-  const { data: pasienAktif, isLoading: pasienLoading } = useQuery({
-    queryKey: ['pasien-aktif'],
-    queryFn: fetchPasienAktif,
-  });
-
-  const { data: antrianTerakhir, isLoading: antrianLoading } = useQuery({
-    queryKey: ['antrian-terakhir'],
-    queryFn: fetchAntrianTerakhir,
-  });
-
   const pasienColumns: Column<Record<string, unknown>>[] = [
     { key: 'no', label: 'No', render: (_, i) => i + 1 },
     { key: 'nm_pasien', label: 'Nama Lengkap' },
-    { key: 'kunjungan', label: 'Kunj' },
+    { key: 'jumlah', label: 'Kunj' },
   ];
 
   const antrianColumns: Column<Record<string, unknown>>[] = [
     { key: 'no', label: 'No', render: (_, i) => i + 1 },
+    { key: 'no_reg', label: 'No Reg' },
     { key: 'nm_pasien', label: 'Nama Lengkap' },
+    { key: 'jam_reg', label: 'Jam' },
     {
-      key: 'status',
+      key: 'stts',
       label: 'Status',
       render: (item) => (
         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-accent text-accent-foreground">
-          {(item.status as string) || 'Menunggu'}
+          {(item.stts as string) || 'Menunggu'}
         </span>
       ),
     },
   ];
 
   const today = format(new Date(), 'dd/MM/yyyy', { locale: id });
+
+  const chartData = stats?.chart?.labels?.map((label: string, index: number) => ({
+    name: label,
+    count: stats.chart.values[index]
+  })) || [];
 
   return (
     <div className="space-y-6">
@@ -109,11 +101,11 @@ const Dashboard = () => {
             <span>{today}</span>
           </div>
         </div>
-        {poliklinik?.data?.length > 0 ? (
+        {chartData.length > 0 ? (
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
-                data={poliklinik.data}
+                data={chartData}
                 margin={{
                   top: 20,
                   right: 30,
@@ -140,7 +132,7 @@ const Dashboard = () => {
                   itemStyle={{ color: 'hsl(var(--foreground))' }}
                 />
                 <Bar dataKey="count" radius={[4, 4, 0, 0]} barSize={30}>
-                  {poliklinik.data.map((entry: any, index: number) => (
+                  {chartData.map((entry: any, index: number) => (
                     <Cell key={`cell-${index}`} fill="hsl(var(--primary) / 0.8)" />
                   ))}
                 </Bar>
@@ -156,11 +148,11 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div>
           <h2 className="text-sm font-bold mb-3 text-foreground">Pasien Paling Aktif</h2>
-          <DataTable columns={pasienColumns} data={pasienAktif?.data || []} isLoading={pasienLoading} />
+          <DataTable columns={pasienColumns} data={stats?.pasien_aktif || []} isLoading={statsLoading} />
         </div>
         <div>
           <h2 className="text-sm font-bold mb-3 text-foreground">Antrian 10 Pasien Terakhir</h2>
-          <DataTable columns={antrianColumns} data={antrianTerakhir?.data || []} isLoading={antrianLoading} />
+          <DataTable columns={antrianColumns} data={stats?.antrian_terakhir || []} isLoading={statsLoading} />
         </div>
       </div>
     </div>
