@@ -8,8 +8,6 @@ interface ImportMetaEnv {
   readonly VITE_APP_TITLE?: string;
   readonly VITE_APP_LOGO?: string;
   readonly VITE_WA_GATEWAY_URL?: string;
-  readonly VITE_WA_GATEWAY_API_KEY?: string;
-  readonly VITE_WA_SENDER_NUMBER?: string;
 }
 
 interface ImportMeta {
