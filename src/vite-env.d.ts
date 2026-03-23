@@ -8,6 +8,7 @@ interface ImportMetaEnv {
   readonly VITE_APP_TITLE?: string;
   readonly VITE_APP_LOGO?: string;
   readonly VITE_WA_GATEWAY_URL?: string;
+  readonly VITE_REQUIRE_OTP?: string;
 }
 
 interface ImportMeta {

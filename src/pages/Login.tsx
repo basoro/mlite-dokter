@@ -58,6 +58,15 @@ const Login = () => {
       }
 
       // OTP Flow
+      const requireOtp = import.meta.env.VITE_REQUIRE_OTP === 'true';
+
+      if (!requireOtp) {
+         login(data.token, user, form.password);
+         toast.success('Login berhasil!');
+         navigate('/dashboard');
+         return;
+      }
+
       setIsProcessingOtp(true);
       try {
         // We need to set the token temporarily for the next requests because it's not in the store yet
